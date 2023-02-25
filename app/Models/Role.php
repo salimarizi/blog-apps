@@ -17,4 +17,13 @@ class Role extends Model
     public function users() {
         return $this->hasMany(User::class);
     }
+
+    public static function permissions($role) {
+        if ($role === "normal") {
+            return ['crud:all_posts', 'crud:users'];
+        } elseif ($role === "manager") {
+            return ['crud:all_posts'];
+        }
+        return ['crud:own_posts'];
+    }
 }

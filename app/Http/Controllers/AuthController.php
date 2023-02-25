@@ -59,7 +59,6 @@ class AuthController extends Controller
                     400
                 );
             } else {
-                // TODO: Authenticate Email and Password
                 $user = User::where('email', $request->email)->first();
 
                 if (!Hash::check($request->password, $user->password)) {
@@ -68,9 +67,14 @@ class AuthController extends Controller
                         401
                     );
                 }
-                
+
+                $token = $user->createToken($user->role, Role::permissions($user->role))->plainTextToken;
+
                 $user->role = $user->role;
-                return ResponseHelper::success($user);
+                return ResponseHelper::success([
+                    'token' => $token,
+                    'user' => $user
+                ]);
             }
         } catch (Exception $e) {
             DB::rollBack();
