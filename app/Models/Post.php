@@ -12,9 +12,14 @@ class Post extends Model
 
     protected $table = 'posts';
 
-    protected $fillable = ['title', 'content'];
+    protected $fillable = [
+        'user_id',
+        'title',
+        'content'
+    ];
 
-    public function creator() {
-        return $this->belongsTo(User::class);
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
