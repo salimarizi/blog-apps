@@ -43,7 +43,9 @@ class UserController extends Controller
                 );
             } else {
                 DB::beginTransaction();
-                $user = User::create($request->all());
+                $data = $request->all();
+                $data['password'] = bcrypt($data['password']);
+                $user = User::create($data);
 
                 DB::commit();
                 return ResponseHelper::success($user);
@@ -92,7 +94,13 @@ class UserController extends Controller
                 return ResponseHelper::failed($validator->errors()->all(), 400);
             } else {
                 DB::beginTransaction();
-                $user = User::find($id)->update($request->all());
+                $data = $request->all();
+
+                if ($request->has('password')) {
+                    $data['password'] = bcrypt($data['password']);
+                }
+                
+                $user = User::find($id)->update($data);
 
                 DB::commit();
                 return ResponseHelper::success(User::find($id));

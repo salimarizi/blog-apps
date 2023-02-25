@@ -36,4 +36,21 @@ class UserRequest extends FormRequest
 
         return $data;
     }
+
+    public static function registerRules(): array
+    {
+        return [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|confirmed'
+        ];
+    }
+
+    public static function loginRules(): array
+    {
+        return [
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ];
+    }
 }
