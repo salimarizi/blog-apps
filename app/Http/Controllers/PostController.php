@@ -25,7 +25,7 @@ class PostController extends Controller
                     $currentUser->tokenCan('crud:own_posts')
                 )
             ) {
-                ResponseHelper::failed("Don't have to access the data", 401);
+                return ResponseHelper::failed("Don't have to access the data", 401);
             }
 
             return $next($request);
@@ -45,7 +45,7 @@ class PostController extends Controller
 
             return ResponseHelper::success($posts);
         } catch (Exception $e) {
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 
@@ -74,7 +74,7 @@ class PostController extends Controller
             }
         } catch (Exception $e) {
             DB::rollBack();
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 
@@ -99,7 +99,7 @@ class PostController extends Controller
                 return ResponseHelper::success($post);
             }
         } catch (Exception $e) {
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 
@@ -137,7 +137,7 @@ class PostController extends Controller
             }
         } catch (Exception $e) {
             DB::rollBack();
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 
@@ -166,7 +166,7 @@ class PostController extends Controller
             return ResponseHelper::success("Successfully delete data");
         } catch (Exception $e) {
             DB::rollBack();
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 }

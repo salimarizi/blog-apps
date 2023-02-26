@@ -17,7 +17,7 @@ class RoleController extends Controller
         try {
             return ResponseHelper::success(Role::all());
         } catch (Exception $e) {
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 
@@ -34,7 +34,7 @@ class RoleController extends Controller
                 return ResponseHelper::success($role);
             }
         } catch (Exception $e) {
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 }

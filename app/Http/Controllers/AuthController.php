@@ -41,7 +41,7 @@ class AuthController extends Controller
             }
         } catch (Exception $e) {
             DB::rollBack();
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 
@@ -61,6 +61,10 @@ class AuthController extends Controller
             } else {
                 $user = User::where('email', $request->email)->first();
 
+                if (!$user) {
+                    return ResponseHelper::failed("Email not registered", 401);
+                }
+
                 if (!Hash::check($request->password, $user->password)) {
                     return ResponseHelper::failed(
                         "Invalid credentials",
@@ -68,7 +72,7 @@ class AuthController extends Controller
                     );
                 }
 
-                $token = $user->createToken($user->role, Role::permissions($user->role))->plainTextToken;
+                $token = $user->createToken($user->role->name, Role::permissions($user->role->name))->plainTextToken;
 
                 $user->role = $user->role;
                 return ResponseHelper::success([
@@ -78,7 +82,7 @@ class AuthController extends Controller
             }
         } catch (Exception $e) {
             DB::rollBack();
-            return ResponseHelper::failed($e, 500);
+            return ResponseHelper::failed($e->getMessage(), 500);
         }
     }
 }

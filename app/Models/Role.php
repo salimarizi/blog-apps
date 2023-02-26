@@ -19,7 +19,7 @@ class Role extends Model
     }
 
     public static function permissions($role) {
-        if ($role === "normal") {
+        if ($role === "admin") {
             return ['crud:all_posts', 'crud:users'];
         } elseif ($role === "manager") {
             return ['crud:all_posts'];
