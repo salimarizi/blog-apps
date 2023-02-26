@@ -13,13 +13,37 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $currentUser = $request->user();
+
+            if (
+                !(
+                    $currentUser->tokenCan('crud:all_posts')
+                    ||
+                    $currentUser->tokenCan('crud:own_posts')
+                )
+            ) {
+                ResponseHelper::failed("Don't have to access the data", 401);
+            }
+
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            return ResponseHelper::success(Post::all());
+            $currentUser = $request->user();
+            $posts = $currentUser->tokenCan('crud:all_posts') ?
+                Post::all()
+                :
+                Post::where('user_id', $currentUser->id)->get();
+
+            return ResponseHelper::success($posts);
         } catch (Exception $e) {
             return ResponseHelper::failed($e, 500);
         }
@@ -57,10 +81,17 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         try {
-            $post = Post::find($id);
+            $currentUser = $request->user();
+            $post = $currentUser->tokenCan('crud:all_posts') ?
+                Post::find($id)
+                :
+                Post::where('id', $id)
+                ->where('user_id', $currentUser->id)
+                ->get();
+
             if (!$post) {
                 return ResponseHelper::failed("Data Not found", 404);
             } else {
@@ -78,7 +109,14 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $post = Post::find($id);
+            $currentUser = $request->user();
+            $post = $currentUser->tokenCan('crud:all_posts') ?
+                    Post::find($id)
+                    :
+                    Post::where('id', $id)
+                        ->where('user_id', $currentUser->id)
+                        ->get();
+
             if (!$post) {
                 return ResponseHelper::failed("Data Not found", 404);
             }
@@ -106,10 +144,17 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         try {
-            $post = Post::find($id);
+            $currentUser = $request->user();
+            $post = $currentUser->tokenCan('crud:all_posts') ?
+                    Post::find($id)
+                    :
+                    Post::where('id', $id)
+                        ->where('user_id', $currentUser->id)
+                        ->get();
+
             if (!$post) {
                 return ResponseHelper::failed("Data Not found", 404);
             }

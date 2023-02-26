@@ -13,6 +13,18 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $currentUser = $request->user();
+
+            if (!$currentUser->tokenCan('crud:users')) {
+                ResponseHelper::failed("Don't have to access the data", 401);
+            }
+
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
