@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: blog-nginx
+  name: blog-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: blog-nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/grpc-server-app-network: "true"
+        io.kompose.service: blog-nginx
+    spec:
+      containers:
+        - env:
+            - name: NGINX_FPM_HOST
+              value: blog_app
+            - name: NGINX_ROOT
+              value: /usr/src/app/public
+          image: blog-nginx
+          name: blog-nginx
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/src/app/public
+              name: blog-nginx-claim0
+      restartPolicy: Always
+      volumes:
+        - name: blog-nginx-claim0
+          persistentVolumeClaim:
+            claimName: blog-nginx-claim0
+status: {}

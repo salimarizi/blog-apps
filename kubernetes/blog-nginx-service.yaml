@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: blog-nginx
+  name: blog-nginx
+spec:
+  ports:
+    - name: "8000"
+      port: 8000
+      targetPort: 80
+  selector:
+    io.kompose.service: blog-nginx
+status:
+  loadBalancer: {}

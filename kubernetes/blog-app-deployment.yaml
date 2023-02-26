@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: blog-app
+  name: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: blog-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/grpc-server-app-network: "true"
+        io.kompose.service: blog-app
+    spec:
+      containers:
+        - image: blog-app
+          name: blog-app
+          ports:
+            - containerPort: 9000
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/src/app
+              name: blog-app-claim0
+            - mountPath: /usr/src/app/public
+              name: blog-app-claim1
+      restartPolicy: Always
+      volumes:
+        - name: blog-app-claim0
+          persistentVolumeClaim:
+            claimName: blog-app-claim0
+        - name: blog-app-claim1
+          persistentVolumeClaim:
+            claimName: blog-app-claim1
+status: {}
