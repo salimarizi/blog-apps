@@ -21,7 +21,15 @@ This project about Blog Apps with Multiple Roles. There was 3 roles in the defau
 ![Database Design](https://github.com/salimarizi/blog-apps/blob/main/public/Database.png?raw=true)
 
 
-### How to Run 
+### How to Run
+
+There are two was to run this application. Feel free to choose the way to run this app.
+
+### Run with Docker
+1. After clone the apps, you can simply type `docker-compose up -d` and wait till all the process done.
+2. After installation is done, you can go to browser and go to http://localhost:8000 and you will see the app is running
+
+### Run manually
 1. After clone the apps, install all the necessary libraries by running `composer install` on terminal
 2. Set the environment variable by editing `.env` file (if there is no `.env` file, please run `cp .env.example .env`)
 3. Then for migrate the database migration, type `php artisan migrate`
