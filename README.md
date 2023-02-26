@@ -7,6 +7,58 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Blog Apps
+
+This project about Blog Apps with Multiple Roles. There was 3 roles in the default. Admin can manage/CRUD all users and posts data. Manager can manage/CRUD all posts data. And Normal User can only manage/CRUD his/her posts.
+
+### Tech stacks
+
+- PHP (Laravel 10)
+- Sanctum (for Authentication and Authorization)
+- MySQL Database
+
+### Database Design
+![Database Design](https://github.com/salimarizi/blog-apps/blob/main/public/Database.png?raw=true)
+
+
+### How to Run 
+1. After clone the apps, install all the necessary libraries by running `composer install` on terminal
+2. Set the environment variable by editing `.env` file (if there is no `.env` file, please run `cp .env.example .env`)
+3. Then for migrate the database migration, type `php artisan migrate`
+4. The last step is simply run `php artisan serve` to serve the application
+
+(Optional) for running the test cases we can setup the test environment by using this steps:
+
+1. Create test database by running `touch database/test.sqlite`
+2. Copy the .env to .env.testing and set the database to be using the test database.
+3. After that, we can run those test cases by typing `php artisan test`
+
+### Endpoints
+
+1. Authentication
+   * `[POST] /api/register` (Register User)
+   * `[POST] /api/login` (Login User)
+
+2. Roles
+   * `[GET] /api/roles` (Get All Roles)
+   * `[GET] /api/roles/:id` (Get Selected Role by ID)
+
+3. Users
+   * `[GET] /api/users/` (Get All Users)
+   * `[GET] /api/users/:id` (Get Selected User by ID)
+   * `[POST] /api/users` (Store User)
+   * `[PATCH] /api/users/:id` (Update User)
+   * `[DELETE] /api/users/:id` (Delete User)
+
+4. Posts
+   * `[GET] /api/posts/` (Get All Posts)
+   * `[GET] /api/posts/:id` (Get Selected Post by ID)
+   * `[POST] /api/posts` (Store Post)
+   * `[PATCH] /api/posts/:id` (Update Post)
+   * `[DELETE] /api/posts/:id` (Delete Post)
+
+More info about Project APIs can be view by visiting this [Postman Documentation](https://documenter.getpostman.com/view/2470070/2s93CHtuaN)
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
